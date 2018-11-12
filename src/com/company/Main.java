@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Main {
 
-    public static boolean tryParseInt(String value) {
+    private static boolean tryParseInt(String value) {
         try {
             Integer.parseInt(value);
             return true;
@@ -27,14 +27,17 @@ public class Main {
 
             String[] temp = SATScore.split("\\t");
 
-            Schools.add(temp[1]);
-
             if (temp.length > 19) {
 
                 if (tryParseInt(temp[18]) && tryParseInt(temp[19]) && tryParseInt(temp[20]))
+                {
                     scores.add(Integer.parseInt(temp[18]) + Integer.parseInt(temp[19]) + Integer.parseInt(temp[20]));
+                    Schools.add(temp[1]);
+                }
                 else
+                {
                     skippedSchools++; // Handle each school that didn't have a score
+                }
             }
         }
 
