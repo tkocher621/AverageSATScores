@@ -1,4 +1,6 @@
 package com.company;
+import com.sun.xml.internal.ws.policy.PolicyMapUtil;
+
 import java.io.*;
 import java.util.*;
 
@@ -16,10 +18,9 @@ public class Main {
     public static void main(String[] args) throws IOException {
         Scanner scan = new Scanner(new File("scores.txt"));
 
-        List<Integer> scores = new ArrayList<>();
-        List<String> Schools = new ArrayList<>();
+        List<School> Schools = new ArrayList<>();
 
-        int skippedSchools = 0;
+        double skippedSchools = 0;
 
         scan.nextLine();
         while (scan.hasNextLine()) {
@@ -31,27 +32,22 @@ public class Main {
 
                 if (tryParseInt(temp[18]) && tryParseInt(temp[19]) && tryParseInt(temp[20]))
                 {
-                    scores.add(Integer.parseInt(temp[18]) + Integer.parseInt(temp[19]) + Integer.parseInt(temp[20]));
-                    Schools.add(temp[1]);
-                }
-                else
-                {
-                    skippedSchools++; // Handle each school that didn't have a score
+                    Schools.add(new School(temp[1], Integer.parseInt(temp[18]) + Integer.parseInt(temp[19]) + Integer.parseInt(temp[20])));
                 }
             }
         }
 
         System.out.println("Average SAT Scores:");
-        for (int i = 0; i < scores.size(); i++)
+        for (int i = 0; i < Schools.size(); i++)
         {
-            System.out.println(Schools.get(i) + ": " + scores.get(i));
+            System.out.println(Schools.get(i).schoolName + ": " + Schools.get(i).averageScore);
         }
 
         int top1 = 0, top2 = 0, top3 = 0;
         int top1index = 0, top2index = 0, top3index = 0;
-        for (int i = 0; i < scores.size(); i++)
+        for (int i = 0; i < Schools.size(); i++)
         {
-            int a = scores.get(i);
+            int a = Schools.get(i).averageScore;
             if (a > top1)
             {
                 top3 = top2;
@@ -74,17 +70,17 @@ public class Main {
 
         System.out.println(); // Spacing this text from the last to mak it looks nicer
         System.out.println("Top three schools:");
-        System.out.println("#1 - " + Schools.get(top1index) + ": " + scores.get(top1index));
-        System.out.println("#2 - " + Schools.get(top2index) + ": " + scores.get(top2index));
-        System.out.println("#3 - " + Schools.get(top3index) + ": " + scores.get(top3index));
+        System.out.println("#1 - " + Schools.get(top1index).schoolName + ": " + Schools.get(top1index).averageScore);
+        System.out.println("#2 - " + Schools.get(top2index).schoolName + ": " + Schools.get(top2index).averageScore);
+        System.out.println("#3 - " + Schools.get(top3index).schoolName + ": " + Schools.get(top3index).averageScore);
 
         int total = 0;
-        for (int i : scores)
+        for (int i = 0; i < Schools.size(); i++)
         {
-            total += i;
+            total += Schools.get(i).averageScore;
         }
         System.out.println();
-        System.out.println("State average: " + total / (scores.size() - skippedSchools));
+        System.out.println("State average: " + total / (Schools.size() - skippedSchools));
 
     }
 }
